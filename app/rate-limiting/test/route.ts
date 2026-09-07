@@ -36,6 +36,10 @@ const ajGuest = aj.withRule(
   }),
 );
 
+// Bolt Optimization: Pre-evaluate environment check at module scope to avoid
+// calling isDevelopment(process.env) on every incoming HTTP request.
+const isDev = isDevelopment(process.env);
+
 // Returns pre-instantiated rules depending on whether the session is present.
 function getClient(session: Session | null) {
   return session?.user ? ajUser : ajGuest;
@@ -50,7 +54,7 @@ export async function POST(req: NextRequest) {
   // Next.js 15 doesn't provide the IP address in the request object so we use
   // the Arcjet utility package to parse the headers and find it. If we're
   // running in development mode, we'll use a local IP address.
-  const userIp = isDevelopment(process.env) ? "127.0.0.1" : ip(req);
+  const userIp = isDev ? "127.0.0.1" : ip(req);
 
   // Use the user ID if the user is logged in, otherwise use the IP address
   const fingerprint = session?.user?.id ?? userIp;

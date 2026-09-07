@@ -22,3 +22,8 @@
 
 **Learning:** Calling `hostname?.match(/.../)` inside Next.js Server Components / route handlers re-compiles regular expressions and allocates match result arrays on every incoming HTTP request.
 **Action:** Pre-instantiate static RegExp instances at module scope outside component render bodies or route handlers, and use `RegExp.prototype.test()` instead of `match()` for boolean checks.
+
+## 2026-09-06 - Module-scope static environment evaluation vs per-request function calls in API route handlers
+
+**Learning:** Calling `isDevelopment(process.env)` inside dynamic API route handlers forces environment lookup and evaluation on every incoming HTTP request.
+**Action:** Pre-evaluate static environment checks like `isDevelopment(process.env)` at module scope outside request handler functions and reuse the boolean variable per request.

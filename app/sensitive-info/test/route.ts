@@ -25,11 +25,15 @@ const aj = arcjet
     }),
   );
 
+// Bolt Optimization: Pre-evaluate environment check at module scope to avoid
+// calling isDevelopment(process.env) on every incoming HTTP request.
+const isDev = isDevelopment(process.env);
+
 export async function POST(req: NextRequest) {
   // Next.js 15 doesn't provide the IP address in the request object so we use
   // the Arcjet utility package to parse the headers and find it. If we're
   // running in development mode, we'll use a local IP address.
-  const userIp = isDevelopment(process.env) ? "127.0.0.1" : ip(req);
+  const userIp = isDev ? "127.0.0.1" : ip(req);
   // The protect method returns a decision object that contains information
   // about the request.
   const decision = await aj.protect(req, { fingerprint: userIp });
