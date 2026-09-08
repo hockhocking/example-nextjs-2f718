@@ -58,6 +58,7 @@ export default function RootLayout({ children }: Props) {
               height={30}
               width={310}
               className="light"
+              priority
             />
             <Image
               src={LogoDark}
@@ -65,6 +66,7 @@ export default function RootLayout({ children }: Props) {
               height={30}
               width={310}
               className="dark"
+              priority
             />
           </Link>
           <div className="header-end">
